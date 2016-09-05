@@ -18,7 +18,7 @@ Michael McRoskey
 
 - **How would you represent the binary tree using an array?**
 
-ascii art here
+        ascii art here
 
 
 - **When would it be better to use an array representation of a binary tree over the traditional node based representation?**
@@ -32,11 +32,11 @@ ascii art here
 
 **4) Modify the struct Node above to use smart pointers:**
 
-struct Node {
-int          value;
-struct Node *left;
-struct Node *right;
-};
+    struct Node {
+        int          value;
+        struct Node *left;
+        struct Node *right;
+    };
 
 **What are the benefits of using smart pointers in this struct Node?**
 
