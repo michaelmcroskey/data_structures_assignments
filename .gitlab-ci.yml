@@ -1,4 +1,4 @@
 image: pbui/cse-30331-fa16:1
 test:
   script:
-    - make test
+    - make BRANCH=$CI_BUILD_REF_NAME test
