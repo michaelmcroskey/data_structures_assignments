@@ -1,8 +1,18 @@
 // Challenge 02: Adding List-Based Integers
 
+// Michael McRoskey
+// Challenge 02
+// solution.cpp
+
+#include <iostream>
+#include <vector>
+
 // Main Execution
 
-int main(int argc, char *argv[]) {
+int main() {
+    
+    //------------Gather Input-------------//
+    
     return 0;
 }
 
