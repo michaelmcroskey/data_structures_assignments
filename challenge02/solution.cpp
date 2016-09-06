@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
+#include <string>
 
 const int NITEMS = 10;
 
@@ -29,10 +31,17 @@ class List {
         List() : head(nullptr), length(0) {}
         iterator front() { return head; };
 
-        ~List();                                    // Destructor
-        List(const List<T> &other);		    // Copy Constructor
-        List<T>& operator=(List<T> other);	    // Assignment Operator
-        void swap(List<T> &other);		    // Utility
+        ~List();								// Destructor
+        List(const List<T> &other);			// Copy Constructor
+        List<T>& operator=(List<T> other);		// Assignment Operator
+        void swap(List<T> &other);				// Utility
+//		List operator+(const List& b){
+//			List box;
+//			box.length = this->length + b.length;
+//			box.breadth = this->breadth + b.breadth;
+//			box.height = this->height + b.height;
+//			return box;
+//		}
 
         size_t size() const { return length; }
         T& at(const size_t i);
@@ -97,28 +106,28 @@ T& List<T>::at(const size_t i) {
 template <typename T>
 void List<T>::insert(iterator it, const T& data) {
     if (head == nullptr && it == nullptr) {
-        head = new Node{data, nullptr};
-    } else {
-    	Node *node = new Node{data, it->next};
-    	it->next   = node;
-    }
-    length++;
+		head = new Node{data, nullptr};
+	} else {
+		Node *node = new Node{data, it->next};
+		it->next   = node;
+	}
+	length++;
 }
 
 template <typename T>
 void List<T>::push_back(const T& data) {
-    if (head == nullptr) {
-        head = new Node{data, nullptr};
-    } else {
-        Node *curr = head;
-        Node *tail = head;
+	if (head == nullptr) {
+		head = new Node{data, nullptr};
+	} else {
+		Node *curr = head;
+		Node *tail = head;
 
-        while (curr) {
-            tail = curr;
-            curr = curr->next;
-        }
+		while (curr) {
+			tail = curr;
+			curr = curr->next;
+		}
 
-        tail->next = new Node{data, nullptr};
+		tail->next = new Node{data, nullptr};
     }
     length++;
 }
@@ -152,63 +161,63 @@ void List<T>::erase(iterator it) {
 
 //------------Main Execution-------------//
 
-int main(int argc, char *argv[]) {
-    List<int> list;
+int main() {
 
-    std::cout << "List Size: " << list.size() << std::endl;
+	using namespace std;
 
-    for (int i = 0; i < NITEMS; i++) {
-        list.push_back(i);
-    }
+	string line;							// for reading input
+	List<int> integer1, integer2;			// LLs to store integers
+	
+	while (getline(std::cin, line)){		// read input
+		if (line.empty()) break;			// end if enter key
+		
+		int word = 1, ascii_shift = 48;		// word 1|2; character shift
+		string::iterator it;				// iterator for FOR loop
+		
+		
+		//-------------Gather/Parse Input-------------//
+		// start at the end and move toward beginning //
+		
+		for (it = line.end()-1; it >= line.begin(); it--){
+			if (word == 1) {
+				if(*it == ' '){				// if space, move to word 2
+					word = 2;
+					it--;
+				} else {					// add value to integer1 list
+					integer1.push_back(*it-ascii_shift);
+				}
+			}
+			if (word == 2) {				// add value to integer2 list
+				integer2.push_back(*it-ascii_shift);
+			}
+		}
+		
+		//--------------Adding the Lists--------------//
+		// start at the end and move toward beginning //
+		
+		
+		//--------------Printing Results--------------//
+		// start at the end and move toward beginning //
+		
+		//--------Display Integer 1----------//
+		for (size_t i=0; i<integer1.size(); i++) {
+	        std::cout << "List at " << i << " " << integer1.at(i) << std::endl;
+	    }
+		
+		//--------Display Integer 1----------//
+		for (size_t i=0; i<integer2.size(); i++) {
+	        std::cout << "List at " << i << " " << integer2.at(i) << std::endl;
+	    }
+		
+		
+		// add linked lists
 
-    std::cout << "List Size: " << list.size() << std::endl;
-    std::cout << "List Items:" << std::endl;
-    for (size_t i = 0; i < list.size(); i++) {
-        std::cout << "List at " << i << " " << list.at(i) << std::endl;
-    }
+	}
+	cout << "successfully ended" << endl;
+	
 
-    std::cout << "**** Insert" << std::endl;
-    auto head = list.front();
-    list.insert(head, NITEMS + 1);
-    list.insert(head, NITEMS + 2);
-    list.insert(head->next->next, NITEMS + 3);
 
-    std::cout << "List Size: " << list.size() << std::endl;
-    std::cout << "List Items:" << std::endl;
-    for (size_t i = 0; i < list.size(); i++) {
-        std::cout << "List at " << i << " " << list.at(i) << std::endl;
-    }
-
-    // List copy
-    std::cout << "**** Copy" << std::endl;
-    List<int> copy(list);
-
-    std::cout << "Copy Size: " << copy.size() << std::endl;
-    std::cout << "Copy Items:" << std::endl;
-    for (size_t i = 0; i < copy.size(); i++) {
-        std::cout << "Copy at " << i << " " << copy.at(i) << std::endl;
-    }
-
-    // List assignment
-    std::cout << "**** Assignment" << std::endl;
-    copy.push_back(NITEMS + 4);
-    list = copy;
-    std::cout << "List Size: " << list.size() << std::endl;
-    std::cout << "List Items:" << std::endl;
-    for (size_t i = 0; i < list.size(); i++) {
-        std::cout << "List at " << i << " " << list.at(i) << std::endl;
-    }
-
-    // Erase
-    std::cout << "**** Erase" << std::endl;
-    list.erase(list.front());
-    list.erase(list.front()->next);
-    std::cout << "List Size: " << list.size() << std::endl;
-    std::cout << "List Items:" << std::endl;
-    for (size_t i = 0; i < list.size(); i++) {
-        std::cout << "List at " << i << " " << list.at(i) << std::endl;
-    }
-
+ 
     return 0;
 }
 // vim: set sts=4 sw=4 ts=8 expandtab ft=cpp:
