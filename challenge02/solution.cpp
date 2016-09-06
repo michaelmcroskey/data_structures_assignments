@@ -9,45 +9,45 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
-
-const int NITEMS = 10;
+#include <cassert>
 
 //------------List Declaration-------------//
 
 template <typename T>
 class List {
-    protected:
-        struct Node {
-            T     data;
-            Node *next;
-        };
-
-        typedef Node * iterator;
-
-        Node  *head;
-        size_t length;
-
-    public:
-        List() : head(nullptr), length(0) {}
-        iterator front() { return head; };
-
-        ~List();								// Destructor
-        List(const List<T> &other);			// Copy Constructor
-        List<T>& operator=(List<T> other);		// Assignment Operator
-        void swap(List<T> &other);				// Utility
-//		List operator+(const List& b){
-//			List box;
-//			box.length = this->length + b.length;
-//			box.breadth = this->breadth + b.breadth;
-//			box.height = this->height + b.height;
-//			return box;
-//		}
-
-        size_t size() const { return length; }
-        T& at(const size_t i);
-        void insert(iterator it, const T &data);
-        void push_back(const T &data);
-        void erase(iterator it);
+protected:
+    struct Node {
+        T     data;
+        Node *next;
+    };
+    
+    typedef Node * iterator;
+    
+    Node  *head;
+    size_t length;
+    
+public:
+    List() : head(nullptr), length(0) {}
+    iterator front() { return head; };
+    
+    ~List();								// Destructor
+    List(const List<T> &other);			// Copy Constructor
+    List<T>& operator=(List<T> other);		// Assignment Operator
+    void swap(List<T> &other);				// Utility
+    
+    //		List operator+(const List& b){
+    //			List box;
+    //			box.length = this->length + b.length;
+    //			box.breadth = this->breadth + b.breadth;
+    //			box.height = this->height + b.height;
+    //			return box;
+    //		}
+    
+    size_t size() const { return length; }
+    T& at(const size_t i);
+    void insert(iterator it, const T &data);
+    void push_back(const T &data);
+    void erase(iterator it);
 };
 
 //------------List Implementation-------------//
@@ -56,7 +56,7 @@ class List {
 template <typename T>
 List<T>::~List() {
     Node *next = nullptr;
-
+    
     // Need next otherwise invalid reads (use valgrind)
     for (Node *curr = head; curr != nullptr; curr = next) {
         next = curr->next;
@@ -67,7 +67,7 @@ List<T>::~List() {
 // Post-condition: Copies all nodes from other
 template <typename T>
 List<T>::List(const List<T> &other)
-    : head(nullptr), length(0) {
+: head(nullptr), length(0) {
     for (Node *curr = other.head; curr != nullptr; curr = curr->next) {
         push_back(curr->data);
     }
@@ -90,12 +90,12 @@ template <typename T>
 T& List<T>::at(const size_t i) {
     Node *node = head;
     size_t   n = 0;
-
+    
     while (n < i && node != nullptr) {
         node = node->next;
         n++;
     }
-
+    
     if (node) {
         return node->data;
     } else {
@@ -106,28 +106,28 @@ T& List<T>::at(const size_t i) {
 template <typename T>
 void List<T>::insert(iterator it, const T& data) {
     if (head == nullptr && it == nullptr) {
-		head = new Node{data, nullptr};
-	} else {
-		Node *node = new Node{data, it->next};
-		it->next   = node;
-	}
-	length++;
+        head = new Node{data, nullptr};
+    } else {
+        Node *node = new Node{data, it->next};
+        it->next   = node;
+    }
+    length++;
 }
 
 template <typename T>
 void List<T>::push_back(const T& data) {
-	if (head == nullptr) {
-		head = new Node{data, nullptr};
-	} else {
-		Node *curr = head;
-		Node *tail = head;
-
-		while (curr) {
-			tail = curr;
-			curr = curr->next;
-		}
-
-		tail->next = new Node{data, nullptr};
+    if (head == nullptr) {
+        head = new Node{data, nullptr};
+    } else {
+        Node *curr = head;
+        Node *tail = head;
+        
+        while (curr) {
+            tail = curr;
+            curr = curr->next;
+        }
+        
+        tail->next = new Node{data, nullptr};
     }
     length++;
 }
@@ -135,89 +135,98 @@ void List<T>::push_back(const T& data) {
 template <typename T>
 void List<T>::erase(iterator it) {
     if (it == nullptr) {
-	throw std::out_of_range("invalid iterator");
+        throw std::out_of_range("invalid iterator");
     }
-
+    
     if (head == it) {
-	head = head->next;
-	delete it;
+        head = head->next;
+        delete it;
     } else {
-	Node *node = head;
-
-	while (node != nullptr && node->next != it) {
-	    node = node->next;
-	}
-
-	if (node == nullptr) {
-	    throw std::out_of_range("invalid iterator");
-	}
-
-	node->next = it->next;
-	delete it;
+        Node *node = head;
+        
+        while (node != nullptr && node->next != it) {
+            node = node->next;
+        }
+        
+        if (node == nullptr) {
+            throw std::out_of_range("invalid iterator");
+        }
+        
+        node->next = it->next;
+        delete it;
     }
-
+    
     length--;
 }
 
 //------------Main Execution-------------//
 
 int main() {
-
-	using namespace std;
-
-	string line;							// for reading input
-	List<int> integer1, integer2;			// LLs to store integers
-	
-	while (getline(std::cin, line)){		// read input
-		if (line.empty()) break;			// end if enter key
-		
-		int word = 1, ascii_shift = 48;		// word 1|2; character shift
-		string::iterator it;				// iterator for FOR loop
-		
-		
-		//-------------Gather/Parse Input-------------//
-		// start at the end and move toward beginning //
-		
-		for (it = line.end()-1; it >= line.begin(); it--){
-			if (word == 1) {
-				if(*it == ' '){				// if space, move to word 2
-					word = 2;
-					it--;
-				} else {					// add value to integer1 list
-					integer1.push_back(*it-ascii_shift);
-				}
-			}
-			if (word == 2) {				// add value to integer2 list
-				integer2.push_back(*it-ascii_shift);
-			}
-		}
-		
-		//--------------Adding the Lists--------------//
-		// start at the end and move toward beginning //
-		
-		
-		//--------------Printing Results--------------//
-		// start at the end and move toward beginning //
-		
-		//--------Display Integer 1----------//
-		for (size_t i=0; i<integer1.size(); i++) {
-	        std::cout << "List at " << i << " " << integer1.at(i) << std::endl;
-	    }
-		
-		//--------Display Integer 1----------//
-		for (size_t i=0; i<integer2.size(); i++) {
-	        std::cout << "List at " << i << " " << integer2.at(i) << std::endl;
-	    }
-		
-		
-		// add linked lists
-
-	}
-	cout << "successfully ended" << endl;
-	
-
-
- 
+    
+    using namespace std;
+    
+    string line;							// for reading input
+    int input_lines = 0;					// # lines entered ()
+    List<int> integer1, integer2;			// LLs to store integers
+    
+    while (getline(std::cin, line)){		// read input
+        if (line.empty()) break;			// end if enter key
+        input_lines++;						// increment line count
+        
+        int word = 1, ascii_shift = 48;		// word 1|2; character shift
+        string::iterator it;				// rev. iterator for string
+        
+        //-------------Gather/Parse Input-------------//
+        // start at the end and move toward beginning //
+        
+        for (it = line.end()-1; it >= line.begin(); it--){
+            if (word == 1) {
+                if(*it == ' '){				// if space, move to word 2
+                    word = 2;
+                    it--;
+                } else {					// add value to integer1 list
+                    integer1.push_back(*it-ascii_shift);
+                }
+            }
+            if (word == 2) {				// add value to integer2 list
+                integer2.push_back(*it-ascii_shift);
+            }
+        }
+    }
+    cout << "exited loop" << endl;
+    
+    //--------------Adding the Lists--------------//
+    // start at the end and move toward beginning //
+    
+    List<int> sum;
+    
+    for (int i=0; i<integer1.size()-1; i++) {
+        if (integer1.at(i) == NULL){
+            cout << "NULL OR SOMETHING" << endl;
+        }
+        sum.push_back(integer1.at(i) + integer2.at(i));
+        cout << "sum.at(i) is: " << sum.at(i) << endl;
+        i++;
+    }
+    
+    
+    //--------------Printing Results--------------//
+    // start at the end and move toward beginning //
+    
+/*
+    //--------Display Integer 1----------//
+    for (size_t i=0; i<integer1.size(); i++) {
+        std::cout << "List at " << i << " " << integer1.at(i) << std::endl;
+    }
+    
+    cout << endl;
+    
+    //--------Display Integer 1----------//
+    for (size_t i=0; i<integer2.size(); i++) {
+        std::cout << "List at " << i << " " << integer2.at(i) << std::endl;
+    }
+*/
+    
     return 0;
 }
 // vim: set sts=4 sw=4 ts=8 expandtab ft=cpp:
