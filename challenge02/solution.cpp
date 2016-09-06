@@ -7,11 +7,15 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 // Main Execution
 
 int main() {
     
     //------------Gather Input-------------//
+    
+    cout << "Testing" << endl;
     
     return 0;
 }
