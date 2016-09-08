@@ -193,9 +193,8 @@ int main() {
 
 	if (int1.size() > int2.size()) {			// second number bigger
 		int i=0, digit;							// i for out of scope
-		int const_size1 = int1.size();
-		int const_size2 = int2.size();
 		bool carry = false;
+		int const_size2 = int2.size();
 		for (int j=i; j<const_size2; j++) {
 			digit = int1.at(j) + int2.at(j);
 			if (digit >= 10) {					// acount for carry-over
@@ -207,39 +206,39 @@ int main() {
 				digit = digit % 10;				// take remainder
 			}
 			sum.push_back(digit);				// add digit to sum list
-			i=j+1;								// update i for next loop
+			i=j;								// update i for next loop
 		}
-		for (int k=i; k<const_size1; k++) {
+		for (int k=i+1; k<int1.size(); k++) {
 			if (carry){
 				sum.push_back(int1.at(k)+int2.at(k));
+				carry = false;
 			} else {
-				sum.push_back(int1.at(k));		// extra digits just get pushed
+				sum.push_back(int1.at(k));	// extra digits just get pushed
 			}
 			i=k;
 		}
 	    
-	} else if (int2.size() > int1.size()) {// first number bigger
-		
+	} else if (int2.size() > int1.size()) {	// first number bigger
 		int i=0, digit;							// i for out of scope
-		int const_size1 = int1.size();
-		int const_size2 = int2.size();
 		bool carry = false;
+		int const_size1 = int1.size();
 		for (int j=i; j<const_size1; j++) {
 			digit = int2.at(j) + int1.at(j);
 			if (digit >= 10) {					// acount for carry-over
 				if (j+1 >= int1.size()) {
 					int1.push_back(0);
 					carry = true;
-				}					
+				}				
 				int1.at(j+1) += (int)digit/10;	// integer division
 				digit = digit % 10;				// take remainder
 			}
 			sum.push_back(digit);				// add digit to sum list
-			i=j+1;								// update i for next loop
+			i=j;								// update i for next loop
 		}
-		for (int k=i; k<const_size2; k++) {
+		for (int k=i+1; k<int2.size(); k++) {
 			if (carry){
 				sum.push_back(int1.at(k)+int2.at(k));
+				carry = false;
 			} else {
 				sum.push_back(int2.at(k));		// extra digits just get pushed
 			}
