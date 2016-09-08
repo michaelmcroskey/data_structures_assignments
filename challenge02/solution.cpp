@@ -226,8 +226,19 @@ int main() {
 		}
 		
 	} else {									// equality, node by node
-		for (int i=0; i<int1.size(); i++) {
-			sum.push_back(int1.at(i) + int2.at(i));
+		for (int i=0; i<int1.size(); i++) {	// use int1's size
+			int digitsum = int1.at(i) + int2.at(i);
+			if ((digitsum > 9)) {				// if carryover
+				if (i+1 >= int1.size()) {		// if last digit
+					sum.push_back(digitsum % 10);// add digit sum and 1
+					sum.push_back(1);
+				} else {
+					sum.push_back(digitsum % 10);
+					int1.at(i+1) += (int)digitsum/10;// integer division
+				}
+			} else {							// otherwise just add digits
+				sum.push_back(digitsum);
+			}
 		}
 	}
     
