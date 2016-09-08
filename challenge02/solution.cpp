@@ -31,17 +31,9 @@ public:
     iterator front() { return head; };
     
     ~List();								// Destructor
-    List(const List<T> &other);			// Copy Constructor
+    List(const List<T> &other);				// Copy Constructor
     List<T>& operator=(List<T> other);		// Assignment Operator
     void swap(List<T> &other);				// Utility
-    
-    //		List operator+(const List& b){
-    //			List box;
-    //			box.length = this->length + b.length;
-    //			box.breadth = this->breadth + b.breadth;
-    //			box.height = this->height + b.height;
-    //			return box;
-    //		}
     
     size_t size() const { return length; }
     T& at(const size_t i);
@@ -167,7 +159,7 @@ int main() {
     
     string line;							// for reading input
     int input_lines = 0;					// # lines entered ()
-    List<int> integer1, integer2;			// LLs to store integers
+    List<int> int1, int2;					// LLs to store integers
     
     while (getline(std::cin, line)){		// read input
         if (line.empty()) break;			// end if enter key
@@ -184,12 +176,12 @@ int main() {
                 if(*it == ' '){				// if space, move to word 2
                     word = 2;
                     it--;
-                } else {					// add value to integer1 list
-                    integer1.push_back(*it-ascii_shift);
+                } else {					// add value to int1 list
+                    int1.push_back(*it-ascii_shift);
                 }
             }
-            if (word == 2) {				// add value to integer2 list
-                integer2.push_back(*it-ascii_shift);
+            if (word == 2) {				// add value to int2 list
+                int2.push_back(*it-ascii_shift);
             }
         }
     }
@@ -199,15 +191,51 @@ int main() {
     // start at the end and move toward beginning //
     
     List<int> sum;
-    
-    for (int i=0; i<integer1.size()-1; i++) {
-        if (integer1.at(i) == NULL){
-            cout << "NULL OR SOMETHING" << endl;
-        }
-        sum.push_back(integer1.at(i) + integer2.at(i));
-        cout << "sum.at(i) is: " << sum.at(i) << endl;
-        i++;
-    }
+
+	if (int1.size() > int2.size()) {		// second number bigger
+		cout << "int1.size() is bigger" << endl;
+		int i=0, digit;
+		for (int j=i; j<int2.size(); j++) {
+			digit = int1.at(j) + int2.at(j);
+			if (digit >= 10) {
+				int2.at(j+1) += (int)digit/10;
+				digit = digit % 10;
+		}
+			sum.push_back(digit);
+			i=j;
+		}
+		for (int k=i; k<int1.size()-1; k++) {
+			sum.push_back(int1.at(k+1));
+			i=k;
+		}
+		
+		// display
+	    for (size_t i=0; i<sum.size(); i++) {
+	        std::cout << "List at " << i << " " << sum.at(i) << std::endl;
+	    }
+		
+	} else if (int2.size() > int1.size()) {// first number bigger
+		cout << "int2.size() is bigger" << endl;
+		for (int i=0; i<int1.size(); i++) {
+			sum.push_back(int1.at(i) + int2.at(i));
+		}
+		
+	} else {								// equality, node by node
+		for (int i=0; i<int1.size(); i++) {
+			sum.push_back(int1.at(i) + int2.at(i));
+			cout << "sum.at(i) is: " << sum.at(i) << endl;
+		}
+	}
+	
+	
+
+//	    if (node) {
+//	        return node->data;
+//	    } else {
+//	        throw std::out_of_range("invalid list index");
+//	    }
+		
+		// %10 mod 10; remainder
     
     
     //--------------Printing Results--------------//
@@ -215,15 +243,15 @@ int main() {
     
 /*
     //--------Display Integer 1----------//
-    for (size_t i=0; i<integer1.size(); i++) {
-        std::cout << "List at " << i << " " << integer1.at(i) << std::endl;
+    for (size_t i=0; i<int1.size(); i++) {
+        std::cout << "List at " << i << " " << int1.at(i) << std::endl;
     }
     
     cout << endl;
     
     //--------Display Integer 1----------//
-    for (size_t i=0; i<integer2.size(); i++) {
-        std::cout << "List at " << i << " " << integer2.at(i) << std::endl;
+    for (size_t i=0; i<int2.size(); i++) {
+        std::cout << "List at " << i << " " << int2.at(i) << std::endl;
     }
 */
     
