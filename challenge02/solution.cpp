@@ -159,11 +159,12 @@ int main() {
     
     string line;							// for reading input
     int input_lines = 0;					// # lines entered ()
-    List<int> int1, int2;					// LLs to store integers
+    
     
     while (getline(std::cin, line)){		// read input
         if (line.empty()) break;			// end if enter key
         input_lines++;						// increment line count
+		List<int> int1, int2;					// LLs to store integers
         
         int word = 1, ascii_shift = 48;	// word 1|2; character shift
         string::iterator it;				// rev. iterator for string
@@ -184,8 +185,7 @@ int main() {
                 int2.push_back(*it-ascii_shift);
             }
         }
-    }
-    
+
     //--------------Adding the Lists--------------//
     // account for carry-over and int1/int2 sizes //
     
@@ -231,11 +231,13 @@ int main() {
 		}
 	}
     
-    
     //--------------Printing Results--------------//
     // start at the end and move toward beginning //
     for (int j=sum.size()-1; j>=0; j--) {
 		cout << sum.at(j);
+    }
+	cout << endl;
+
     }
     
     return 0;
