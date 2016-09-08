@@ -165,7 +165,7 @@ int main() {
         if (line.empty()) break;			// end if enter key
         input_lines++;						// increment line count
         
-        int word = 1, ascii_shift = 48;		// word 1|2; character shift
+        int word = 1, ascii_shift = 48;	// word 1|2; character shift
         string::iterator it;				// rev. iterator for string
         
         //-------------Gather/Parse Input-------------//
@@ -185,75 +185,58 @@ int main() {
             }
         }
     }
-    cout << "exited loop" << endl;
     
     //--------------Adding the Lists--------------//
-    // start at the end and move toward beginning //
+    // account for carry-over and int1/int2 sizes //
     
     List<int> sum;
 
-	if (int1.size() > int2.size()) {		// second number bigger
-		cout << "int1.size() is bigger" << endl;
-		int i=0, digit;
+	if (int1.size() > int2.size()) {			// second number bigger
+
+		int i=0, digit;							// i for out of scope
 		for (int j=i; j<int2.size(); j++) {
 			digit = int1.at(j) + int2.at(j);
-			if (digit >= 10) {
-				int2.at(j+1) += (int)digit/10;
-				digit = digit % 10;
-		}
-			sum.push_back(digit);
-			i=j;
+			if (digit >= 10) {					// acount for carry-over
+				int2.at(j+1) += (int)digit/10;	// integer division
+				digit = digit % 10;				// take remainder
+			}
+			sum.push_back(digit);				// add digit to sum list
+			i=j;								// update i for next loop
 		}
 		for (int k=i; k<int1.size()-1; k++) {
-			sum.push_back(int1.at(k+1));
+			sum.push_back(int1.at(k+1));		// extra digits just get pushed
+			i=k;
+		}
+	    
+	} else if (int2.size() > int1.size()) {// first number bigger
+		
+		int i=0, digit;							// i for out of scope
+		for (int j=i; j<int1.size(); j++) {
+			digit = int2.at(j) + int1.at(j);
+			if (digit >= 10) {					// acount for carry-over
+				int1.at(j+1) += (int)digit/10;	// integer division
+				digit = digit % 10;				// take remainder
+			}
+			sum.push_back(digit);				// add digit to sum list
+			i=j;								// update i for next loop
+		}
+		for (int k=i; k<int2.size()-1; k++) {
+			sum.push_back(int2.at(k+1));		// extra digits just get pushed
 			i=k;
 		}
 		
-		// display
-	    for (size_t i=0; i<sum.size(); i++) {
-	        std::cout << "List at " << i << " " << sum.at(i) << std::endl;
-	    }
-		
-	} else if (int2.size() > int1.size()) {// first number bigger
-		cout << "int2.size() is bigger" << endl;
+	} else {									// equality, node by node
 		for (int i=0; i<int1.size(); i++) {
 			sum.push_back(int1.at(i) + int2.at(i));
-		}
-		
-	} else {								// equality, node by node
-		for (int i=0; i<int1.size(); i++) {
-			sum.push_back(int1.at(i) + int2.at(i));
-			cout << "sum.at(i) is: " << sum.at(i) << endl;
 		}
 	}
-	
-	
-
-//	    if (node) {
-//	        return node->data;
-//	    } else {
-//	        throw std::out_of_range("invalid list index");
-//	    }
-		
-		// %10 mod 10; remainder
     
     
     //--------------Printing Results--------------//
     // start at the end and move toward beginning //
-    
-/*
-    //--------Display Integer 1----------//
-    for (size_t i=0; i<int1.size(); i++) {
-        std::cout << "List at " << i << " " << int1.at(i) << std::endl;
+    for (int j=sum.size()-1; j>=0; j--) {
+		cout << sum.at(j);
     }
-    
-    cout << endl;
-    
-    //--------Display Integer 1----------//
-    for (size_t i=0; i<int2.size(); i++) {
-        std::cout << "List at " << i << " " << int2.at(i) << std::endl;
-    }
-*/
     
     return 0;
 }
