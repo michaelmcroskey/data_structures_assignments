@@ -188,40 +188,61 @@ int main() {
 
     //--------------Adding the Lists--------------//
     // account for carry-over and int1/int2 sizes //
-    
+
     List<int> sum;
 
 	if (int1.size() > int2.size()) {			// second number bigger
-
 		int i=0, digit;							// i for out of scope
-		for (int j=i; j<int2.size(); j++) {
+		int const_size1 = int1.size();
+		int const_size2 = int2.size();
+		bool carry = false;
+		for (int j=i; j<const_size2; j++) {
 			digit = int1.at(j) + int2.at(j);
 			if (digit >= 10) {					// acount for carry-over
+				if (j+1 >= int2.size()) {
+					int2.push_back(0);
+					carry = true;
+				}
 				int2.at(j+1) += (int)digit/10;	// integer division
 				digit = digit % 10;				// take remainder
 			}
 			sum.push_back(digit);				// add digit to sum list
-			i=j;								// update i for next loop
+			i=j+1;								// update i for next loop
 		}
-		for (int k=i; k<int1.size()-1; k++) {
-			sum.push_back(int1.at(k+1));		// extra digits just get pushed
+		for (int k=i; k<const_size1; k++) {
+			if (carry){
+				sum.push_back(int1.at(k)+int2.at(k));
+			} else {
+				sum.push_back(int1.at(k));		// extra digits just get pushed
+			}
 			i=k;
 		}
 	    
 	} else if (int2.size() > int1.size()) {// first number bigger
 		
 		int i=0, digit;							// i for out of scope
-		for (int j=i; j<int1.size(); j++) {
+		int const_size1 = int1.size();
+		int const_size2 = int2.size();
+		bool carry = false;
+		for (int j=i; j<const_size1; j++) {
 			digit = int2.at(j) + int1.at(j);
 			if (digit >= 10) {					// acount for carry-over
+				if (j+1 >= int1.size()) {
+					int1.push_back(0);
+					carry = true;
+				}					
 				int1.at(j+1) += (int)digit/10;	// integer division
 				digit = digit % 10;				// take remainder
 			}
 			sum.push_back(digit);				// add digit to sum list
-			i=j;								// update i for next loop
+			i=j+1;								// update i for next loop
 		}
-		for (int k=i; k<int2.size()-1; k++) {
-			sum.push_back(int2.at(k+1));		// extra digits just get pushed
+		for (int k=i; k<const_size2; k++) {
+			if (carry){
+				sum.push_back(int1.at(k)+int2.at(k));
+			} else {
+				sum.push_back(int2.at(k));		// extra digits just get pushed
+			}
 			i=k;
 		}
 		
