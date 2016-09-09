@@ -31,7 +31,7 @@ int main()
     //-------------Gather/Parse Input-------------//
     //      push_back values into int vector      //
     while (getline(std::cin, line)){
-        if (line.empty()) break;
+        if (line.empty()) continue;
         
         if (firstline) {
             N = stoi(line);
@@ -50,9 +50,9 @@ int main()
         //-------------Sort Vector/Array--------------//
         //   first convert to abs-val and then sort   //
         
-        for (size_t i=0; i != values.size(); ++i){
-            values[i] = abs(values[i]);
-        }
+//        for (size_t i=0; i != values.size(); ++i){
+//            values[i] = abs(values[i]);
+//        }
         
         sort(values.begin(), values.end());
         
