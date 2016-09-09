@@ -16,7 +16,7 @@ using namespace std;
 
 int main()
 {
-	vector<int> values, sign;
+	vector<int> values, closest, i_closest;
 	bool firstline = true;
 	string line;
 	int N;
@@ -61,23 +61,32 @@ int main()
 	
 	for (size_t i=0; i != values.size()-1; ++i){
 		diff = values[i+1] - values[i];
-		if (diff<min){
-			index = i;
+		if (diff <= min){
+			min = diff;
 		}
 	}
+	
+	for (size_t i=0; i != values.size()-1; ++i)
+		if (min == values[i+1] - values[i])
+			i_closest.push_back(i);
 	
 	//-------------Account for Signs--------------//
 	//   check each element for the proper sign   //
 	
-	int close1 = values[index];
-	int close2 = values[index+1];	
 	
-	for (size_t i=0; i != values.size()-1; ++i){
-		if (signs[i] == close1 || abs(signs[i]) == close1){
-			close1 = signs[i];
-		}
-		if (signs[i] == close2 || abs(signs[i]) == close2){
-			close2 = signs[i];
+	for (size_t i=0; i < i_closest.size(); ++i){
+		closest.push_back(values[i_closest[i]]);
+		closest.push_back(values[i_closest[i]+1])
+	}
+		
+	for (size_t i=0; i < closest.size(); i+=2){
+		for (size_t j=0; j < closest.size(); ++j){
+			if (closest[i] == signs[j] || closest[i] == abs(signs[j])){
+				closest[i] = signs[j];
+			}
+			if (closest[i+1] == signs[j] || closest[i+1] == abs(signs[j])){
+				closest[i+1] = signs[j];
+			}
 		}
 	}
 	
