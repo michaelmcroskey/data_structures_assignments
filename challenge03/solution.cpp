@@ -14,85 +14,91 @@
 
 using namespace std;
 
+template <typename T>
+void write_vector(const vector<T>& V){
+    for(int i=0; i < V.size(); i++)
+        cout << V[i] << " ";
+    cout << endl;
+}
+
 int main()
 {
-	vector<int> values, closest, i_closest;
-	bool firstline = true;
-	string line;
-	int N;
-	
-	//-------------Gather/Parse Input-------------//
-	//      push_back values into int vector      //	
-	while (getline(std::cin, line)){
-		if (line.empty()) break;
-		
-		if (firstline) {
-			N = stoi(line);
-			firstline = false;
-			continue;
-		}
-		
-		istringstream iss(line);
-		copy(istream_iterator<int>(iss),
-		     istream_iterator<int>(),
-		     back_inserter(values));
-	}
-	
-	vector<int> signs = values;
-	
-	//-------------Sort Vector/Array--------------//
-	//   first convert to abs-val and then sort   //
-	
-	for (size_t i=0; i != values.size(); ++i){
-		if (values[i] < 0){
-			sign.push_back(-1);
-		} else {
-			sign.push_back(1);
-		}
-		values[i] = abs(values[i]);
-	}
-	
-	sort(values.begin(), values.end());
-	
-	//------------Find Closest Numbers------------//
-	// compute each difference and store indexes  //	
-	int min = values[values.size()];
-	int diff, index;
-	
-	for (size_t i=0; i != values.size()-1; ++i){
-		diff = values[i+1] - values[i];
-		if (diff <= min){
-			min = diff;
-		}
-	}
-	
-	for (size_t i=0; i != values.size()-1; ++i)
-		if (min == values[i+1] - values[i])
-			i_closest.push_back(i);
-	
-	//-------------Account for Signs--------------//
-	//   check each element for the proper sign   //
-	
-	
-	for (size_t i=0; i < i_closest.size(); ++i){
-		closest.push_back(values[i_closest[i]]);
-		closest.push_back(values[i_closest[i]+1])
-	}
-		
-	for (size_t i=0; i < closest.size(); i+=2){
-		for (size_t j=0; j < closest.size(); ++j){
-			if (closest[i] == signs[j] || closest[i] == abs(signs[j])){
-				closest[i] = signs[j];
-			}
-			if (closest[i+1] == signs[j] || closest[i+1] == abs(signs[j])){
-				closest[i+1] = signs[j];
-			}
-		}
-	}
-	
-	//--------------Display Results---------------//
-	//   display results close #1 and close #2    //	
-	cout << close1 << " " << close2 << endl;
+    vector<int> values, closest, i_closest;
+    bool firstline = true;
+    string line;
+    int N;
+    
+    //-------------Gather/Parse Input-------------//
+    //      push_back values into int vector      //
+    while (getline(std::cin, line)){
+        if (line.empty()) break;
+        
+        if (firstline) {
+            N = stoi(line);
+            firstline = false;
+            continue;
+        }
+        
+        istringstream iss(line);
+        copy(istream_iterator<int>(iss),
+             istream_iterator<int>(),
+             back_inserter(values));
+    }
+    
+    // duplicate values for later
+    vector<int> signs = values;
+    
+    //-------------Sort Vector/Array--------------//
+    //   first convert to abs-val and then sort   //
+    
+    for (size_t i=0; i != values.size(); ++i){
+        values[i] = abs(values[i]);
+    }
+    
+    sort(values.begin(), values.end());
+    
+    //------------Find Closest Numbers------------//
+    // compute each difference and store indexes  //
+    int min = values[values.size()-1], diff;
+    
+    // Find the minimum difference
+    for (size_t i=0; i < values.size()-1; i++){
+        diff = values[i+1] - values[i];
+        if (diff <= min){
+            min = diff;
+        }
+    }
+    
+    // Store indexes of numbers with min differences
+    for (size_t i=0; i < values.size(); i++)
+        if (values[i+1] - values[i] == min)
+            i_closest.push_back(i);
+    
+    // Populate vector with all closest numbers
+    for (size_t i=0; i < i_closest.size(); i++){
+        closest.push_back(values[i_closest[i]]);
+        closest.push_back(values[i_closest[i]+1]);
+    }
+    
+    //-------------Account for Signs--------------//
+    //   check each element for the proper sign   //
+    
+    for (size_t i=0; i < closest.size()-1; i+=2){
+        for (size_t j=0; j < closest.size()-1; ++j){
+            if (closest[i] == signs[j] || closest[i] == abs(signs[j])){
+                closest[i] = signs[j];
+            }
+            if (closest[i+1] == signs[j] || closest[i+1] == abs(signs[j])){
+                closest[i+1] = signs[j];
+            }
+        }
+    }
+    
+    //--------------Display Results---------------//
+    //     display results in closest vector      //
+    
+    sort(closest.begin(), closest.end());
+    write_vector(closest);
     
     return EXIT_SUCCESS;
 }
