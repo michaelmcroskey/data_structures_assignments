@@ -14,13 +14,6 @@
 
 using namespace std;
 
-template <typename T>
-void write_vector(const vector<T>& V){
-    for(int i=0; i < V.size(); i++)
-        cout << V[i] << " ";
-	cout << endl;
-}
-
 int main()
 {
 	vector<int> values, sign;
