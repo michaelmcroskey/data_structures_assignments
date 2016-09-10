@@ -16,9 +16,9 @@ using namespace std;
 
 template <typename T>
 void write_vector(const vector<T>& V){
-    for(int i=0; i < V.size(); i++)
+    for(int i=0; i < V.size()-1; i++)
         cout << V[i] << " ";
-    cout << endl;
+    cout << V[V.size()-1]<< endl;
 }
 
 int main()
