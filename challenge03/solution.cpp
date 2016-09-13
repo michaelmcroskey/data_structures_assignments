@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iterator>
 
 using namespace std;
 
@@ -40,9 +41,9 @@ int main()
         }
         
         istringstream iss(line);
-        copy(istream_iterator<int>(iss),
-             istream_iterator<int>(),
-             back_inserter(values));
+        copy(std::istream_iterator<int>(iss),
+             std::istream_iterator<int>(),
+             std::back_inserter(values));
         
         // duplicate values for later
         signs = values;
