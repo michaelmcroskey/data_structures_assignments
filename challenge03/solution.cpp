@@ -12,6 +12,7 @@
 #include <string>
 #include <sstream>
 #include <iterator>
+#include <memory>
 
 using namespace std;
 
