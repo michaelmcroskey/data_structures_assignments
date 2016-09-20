@@ -6,83 +6,85 @@
 #include <iomanip>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 using namespace std;
 
 // Main Execution
+
+// each player/card in struct
 struct Card {
     int rank, suit;
 	string name;
 };
 
-void royalty(Card *c, char rank);
-void convert_suits(Card *c, char suit);
-bool compare_rank(const Card &a, const Card &b);
-bool compare_suit(const Card &a, const Card &b);
+void convert_royalty(Card *c, string rank);// converts royalty to integers
+void convert_suits(Card *c, char suit);	// converts suits to integers
+bool compare_rank(Card &a, Card &b);		// compares rank
+bool compare_suit(Card &a, Card &b);		// compares suit
 
 int main(int argc, char *argv[]) {
-    
-    //-------------Gather/Parse Input-------------//
-    //      push_back values into int vector      //
-
-	int N;
-	char rank, suit;
-	cin >> N;
-
-	vector<Card> cards;
-	cout << endl;
+   
+	int N = 0;
+	string rank;
+	char suit;
 	
-	for (int i=0; i<N; i++) {
-		cards.push_back(Card());
-		cin >> cards[i].name >> rank >> suit;
+	vector<Card> cards;		// each card stored in vector of structs
+	
+	while (1){
 		
-		royalty(&cards[i], rank);
-		convert_suits(&cards[i], suit);
+		cin >> N;
+		if (N==-1) break;	// sentinel value
 		
-//		cout << cards[i].name << " " << cards[i].rank << " " << cards[i].suit << endl;
-	}
-	
-	std::sort(cards.begin(), cards.end(), compare_suit);
-	std::sort(cards.begin(), cards.end(), compare_rank);
-	
-	for (int i=0; i<N; i++) {
-		cout << cards[i].name << " ";
-		if (i==N-1) {
-			break;
+		for (int i=0; i<N; i++) {
+			// create cards and read input
+			cards.push_back(Card());
+			cin >> cards[i].name >> rank >> suit;
+			
+			// convertroyalty and suits to ints
+			convert_royalty(&cards[i], rank);
+			convert_suits(&cards[i], suit);
 		}
+		
+		// sort first by suit, then rank
+		std::sort(cards.begin(), cards.end(), compare_suit);
+		std::sort(cards.begin(), cards.end(), compare_rank);
+		
+		// display names
+		for (int i=0; i<cards.size(); i++) {
+			cout << cards[i].name;
+			if (i==cards.size()-1) continue;
+			cout << ", ";
+		}
+		cout << endl;
+		cards.clear();
 	}
-	
-
-//    while (getline(std::cin, line)){
-//        if (line.empty()) continue;
-//        
-//        if (firstline) {
-//            N = stoi(line);
-//            firstline = false;
-//            continue;
-//        }
-//        
-//        stringstream s(line);
-//        cout << s << endl;
-//	}
 
     return EXIT_SUCCESS;
 }
 
-void royalty(Card *c, char rank){
-	if (rank == 'J'){
-		c->rank = 11;
-	} else if (rank == 'Q') {
-		c->rank = 12;
-	} else if (rank == 'K') {
-		c->rank = 13;
-	} else if (rank == 'A') {
-		c->rank = 14;
+// convert royalty to integers
+void convert_royalty(Card *c, string rank){
+	if (rank.size()<2) {
+		if (rank[0] == 'J'){
+			c->rank = 11;
+		} else if (rank[0] == 'Q') {
+			c->rank = 12;
+		} else if (rank[0] == 'K') {
+			c->rank = 13;
+		} else if (rank[0] == 'A') {
+			c->rank = 14;
+		} else {
+			c->rank = rank[0] - '0';
+		}
 	} else {
-		c->rank = rank - '0';
+		// 10 is the only two-digit rank
+		c->rank = 10;
 	}
+	
 }
 
+// convert suits to integers
 void convert_suits(Card *c, char suit){
 	if (suit == 'C'){
 		c->suit = 1;
@@ -95,11 +97,11 @@ void convert_suits(Card *c, char suit){
 	}
 }
 
-bool compare_rank(const Card &a, const Card &b){
+bool compare_rank(Card &a, Card &b){
     return a.rank > b.rank;
 }
 
-bool compare_suit(const Card &a, const Card &b){
+bool compare_suit(Card &a, Card &b){
     return a.suit > b.suit;
 }
 
