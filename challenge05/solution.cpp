@@ -12,7 +12,6 @@ int main() {
    
 	int N = 0, tree=1;
 	bool bst = false;
-	string line;
 	
 	while (cin >> N) {
 		// initialize array
