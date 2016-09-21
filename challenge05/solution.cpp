@@ -26,7 +26,7 @@ int main() {
 			// if blank node, ignore it
 			if (a[i] == -1) continue;
 			if (a[2*i+1] == -1) continue;
-			if ((i!=N/2) && a[2*i+2] == -1) continue;
+			if ((i!=N/2) && (a[2*i+2] == -1)) continue;
 			
 			// check left child
 			if (a[2*i+1]>a[i]){
