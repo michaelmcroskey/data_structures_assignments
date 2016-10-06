@@ -57,13 +57,14 @@ void deleteTree(Node* root){
         deleteTree(root->left);
     if(root->right != NULL)
         deleteTree(root->right);
-    delete t;
+    delete root;
     return;
 }
 
 int main (){
     
     int N, P, value, a, b;
+    bool first_pass = true;
     vector<int> pairs;
     
     while (cin >> N){
@@ -71,14 +72,13 @@ int main (){
         // Exit at sentinel value
         if (N==-1) break;
         
-        // Create Tree
+        // Create tree
         for (int i=0; i<N; i++){
             cin >> value;
             root = Insert(root, value);
-            //cout << "Inserted " << value << endl;
         }
         
-        // Pairs
+        // Store pairs
         cin >> P;
         for (int i=0; i<P; i++){
             cin >> a >> b;
@@ -86,18 +86,20 @@ int main (){
             pairs.push_back(b);
         }
         
+        // Find LCA of each pair
+        if(!first_pass)
+            cout << endl;
         for (int i=0; i<(2*P); i+=2){
             a = pairs.at(i);
             b = pairs.at(i+1);
             
             cout << FindLCA(root, a, b)->data << endl;
         }
-    
-    cout << endl;
-    
-    deleteTree(root);
-    root = NULL;
-    pairs.clear();
+            
+        deleteTree(root);
+        root = NULL;
+        pairs.clear();
+        first_pass = false;
     }
 
 }
