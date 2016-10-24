@@ -20,11 +20,11 @@ A good hash function must always generate the same value for a specific input, s
 
 **4) For a hash table using separate chaining (ie. with lists for buckets), identify the average and worst case time complexities in terms of Big O for the following set operations. If the average and worst case time complexities are different, then explain the reason for the difference.**
 
-	| Function | Best | Average | Worst |
-	|----------|------|---------|-------|
-	| Search   | O(1) | O(1)    | O(N)  |
-	| Insert   | O(1) | O(1)    | O(1)  |
-	| Delete   | O(1) | O(1)    | O(N)  |
+| Function | Best | Average | Worst |
+|----------|------|---------|-------|
+| Search   | O(1) | O(1)    | O(N)  |
+| Insert   | O(1) | O(1)    | O(1)  |
+| Delete   | O(1) | O(1)    | O(N)  |
 	
-	The average and worst differ because the worst case assumes every key hashes to the same location in the table, i.e. the same linked list, and the function has to traverse the list. In the search case, it might finally find the value at the very last element in that list. In the insert case, I assumed we could insert a node at the front of the list for a total complexity of O(1). Finally, deleting by value means first finding the value, which might be the last element in a linked list.
+The average and worst differ because the worst case assumes every key hashes to the same location in the table, i.e. the same linked list, and the function has to traverse the list. In the search case, it might finally find the value at the very last element in that list. In the insert case, I assumed we could insert a node at the front of the list for a total complexity of O(1). Finally, deleting by value means first finding the value, which might be the last element in a linked list.
 	
