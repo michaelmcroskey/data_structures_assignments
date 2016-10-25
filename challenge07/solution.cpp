@@ -2,6 +2,7 @@
 // Michael McRoskey
 
 #include <iostream>
+#include <memory>
 #include <unordered_set>
 
 using namespace std;
@@ -20,15 +21,23 @@ class MyList{
             head = nullptr;
         }
         
+        ~MyList(){
+            Node *next = nullptr;
+            for (Node *curr = head; curr != nullptr; curr = next) {
+                next = curr->next;
+                delete curr;
+            }
+        }
+        
         void insert(int value){
             
             if (head == nullptr){
-                Node *first = new Node();
+                Node *first = new Node;
                 first->data = value;
                 first->next = nullptr;
                 head = first;
             } else {
-                Node *newNode = new Node();
+                Node *newNode = new Node;
                 newNode->data = value;
                 newNode->next = nullptr;
 
@@ -45,39 +54,57 @@ class MyList{
         
         void remove(Node *old){
             
-            Node *curr = head;
+            if (old == nullptr){
+                throw std::out_of_range("invalid iterator");
+            }      
+//            Node *curr = head;
             
             // If first node
-            // if (old == head){} // irrelevant
-            
-            // If last node
-            if (old->next == nullptr){
-                while (curr){
-                    if (curr->next == old){
-                        curr->next = nullptr;
-                        delete old;
-                        break;
-                    }
-                    curr = curr->next;
-                }
+            // if (old == head){} // irrelevant in this problem
+            if (head == old){
+                head = head->next;
+                delete old;
             } else {
-                Node *next = old->next;
-                while (curr){
-                    if (curr->next == old){
-                        curr->next = next;
-                        delete old;
-                        break;
-                    }
-                    curr = curr->next;
+                Node *node = head;
+                while (node != nullptr && node->next != old) {
+                    node = node->next;
                 }
+                
+                if (node == nullptr) {
+                    throw std::out_of_range("invalid iterator");
+                }
+                
+                node->next = old->next;
+                delete old;
             }
+//            // If last node
+//            if (old->next == nullptr){
+//                while (curr){
+//                    if (curr->next == old){
+//                        curr->next = nullptr;
+//                        delete old;
+//                        continue;
+//                    }
+//                    curr = curr->next;
+//                }
+//            } else {
+//                Node *next = old->next;
+//                while (curr){
+//                    if (curr->next == old){
+//                        curr->next = next;
+//                        delete old;
+//                        break;
+//                    }
+//                    curr = curr->next;
+//                }
+//            }
         }
         
         void deduplicate(){
             unordered_set<int> s;
             Node *curr = head;
 
-                while(curr) {
+                while (curr) {
                     bool not_in_set = (s.find(curr->data) == s.end());
                     if (not_in_set){     // not found, so insert to set
                         s.insert(curr->data);                        
@@ -102,16 +129,6 @@ class MyList{
                 curr = curr->next;
             }
         }
-        
-        void clear(){
-            Node *curr;
-            while(head) {
-                curr = head;
-                head = curr->next;
-                delete curr;
-            }
-            delete head;
-        }
 
     private:
         Node *head;
@@ -122,10 +139,10 @@ class MyList{
 int main(int argc, char *argv[]) {
     
     int N, x;
-    MyList l;
     bool first_pass = true;
     
     while(cin >> N){
+        MyList l;
         for (int i=0; i<N; i++){
             cin >> x;
             l.insert(x);
@@ -138,7 +155,6 @@ int main(int argc, char *argv[]) {
             cout << endl;
             l.display();
         }
-        l.clear();
     }    
     return EXIT_SUCCESS;
 }
