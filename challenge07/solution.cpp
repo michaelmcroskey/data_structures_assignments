@@ -104,12 +104,13 @@ class MyList{
         }
         
         void clear(){
-            Node *tmpNode;
+            Node *curr;
             while(head) {
-                tmpNode = head;
-                head = tmpNode->next;
-                delete tmpNode;
+                curr = head;
+                head = curr->next;
+                delete curr;
             }
+            delete head;
         }
 
     private:
