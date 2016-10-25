@@ -90,11 +90,17 @@ class MyList{
         
         void display(){
             Node *curr = head;
+            bool first_pass = true;
             while(curr != nullptr){
-                cout << curr->data << " ";
+                if (first_pass){
+                    cout << curr->data;
+                    curr = curr->next;
+                    first_pass = false;
+                    continue;
+                }
+                cout << " " << curr->data;
                 curr = curr->next;
             }
-            cout << endl;
         }
         
         void clear(){
@@ -116,6 +122,7 @@ int main(int argc, char *argv[]) {
     
     int N, x;
     MyList l;
+    bool first_pass = true;
     
     while(cin >> N){
         for (int i=0; i<N; i++){
@@ -123,7 +130,13 @@ int main(int argc, char *argv[]) {
             l.insert(x);
         }
         l.deduplicate();
-        l.display();
+        if (first_pass){
+            l.display();
+            first_pass = false;
+        } else {
+            cout << endl;
+            l.display();
+        }
         l.clear();
     }    
     return EXIT_SUCCESS;
