@@ -31,20 +31,17 @@ class MyList{
         
         void insert(int value){
             
-            if (head == nullptr){
-                Node *first = new Node;
-                first->data = value;
-                first->next = nullptr;
-                head = first;
+            Node *node = new Node;
+            node->data = value;
+            node->next = nullptr;
+            
+            if (head == nullptr){    // if first node
+                head = node;
             } else {
-                Node *newNode = new Node;
-                newNode->data = value;
-                newNode->next = nullptr;
-
                 Node *curr = head;
                 while(curr) {
                     if(curr->next == nullptr) {
-                        curr->next = newNode;
+                        curr->next = node;
                         return;
                     }
                     curr = curr->next;
@@ -52,67 +49,50 @@ class MyList{
             }  
         }
         
-        void remove(Node *old){
-            
+        Node* remove(Node *old, Node *before_it){
             if (old == nullptr){
                 throw std::out_of_range("invalid iterator");
-            }      
-//            Node *curr = head;
-            
-            // If first node
-            // if (old == head){} // irrelevant in this problem
+            }
+          
+            // remove first node
             if (head == old){
                 head = head->next;
                 delete old;
-            } else {
-                Node *node = head;
-                while (node != nullptr && node->next != old) {
-                    node = node->next;
-                }
+                return head;
                 
-                if (node == nullptr) {
-                    throw std::out_of_range("invalid iterator");
-                }
-                
-                node->next = old->next;
+            // remove last node
+            } else if (old->next == nullptr) {
+                before_it->next = nullptr;
                 delete old;
+                return before_it;
+                
+            // remove middle node
+            } else {         
+                before_it->next = old->next;
+                delete old;
+                return before_it;
             }
-//            // If last node
-//            if (old->next == nullptr){
-//                while (curr){
-//                    if (curr->next == old){
-//                        curr->next = nullptr;
-//                        delete old;
-//                        continue;
-//                    }
-//                    curr = curr->next;
-//                }
-//            } else {
-//                Node *next = old->next;
-//                while (curr){
-//                    if (curr->next == old){
-//                        curr->next = next;
-//                        delete old;
-//                        break;
-//                    }
-//                    curr = curr->next;
-//                }
-//            }
+
         }
         
         void deduplicate(){
             unordered_set<int> s;
             Node *curr = head;
-
-                while (curr) {
-                    bool not_in_set = (s.find(curr->data) == s.end());
-                    if (not_in_set){     // not found, so insert to set
-                        s.insert(curr->data);                        
-                    } else {                // found, so remove from list
-                        remove(curr);
-                    }
-                    curr = curr->next;      // increment curr to next node
+            Node *before_it = head;
+            
+            while (curr) {
+                
+                bool not_in_set = (s.find(curr->data) == s.end());
+                
+                if (not_in_set){        // not found, so insert to set
+                    s.insert(curr->data);    
+                } else {                // found, so remove from list
+                    curr = remove(curr, before_it);
                 }
+                
+                before_it = curr;
+                curr = curr->next;
+            }
         }
         
         void display(){
@@ -155,7 +135,8 @@ int main(int argc, char *argv[]) {
             cout << endl;
             l.display();
         }
-    }    
+    }
+    cout << endl;
     return EXIT_SUCCESS;
 }
 
