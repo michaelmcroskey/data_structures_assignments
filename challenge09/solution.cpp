@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         }
         
         // Add connected nodes -------------------
-        for (int i=0; i<map.size(); i++){
+        for (size_t i=0; i<map.size(); i++){
             map = expand_nodes(map);
         }
 
