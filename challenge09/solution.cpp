@@ -1,4 +1,5 @@
 // Challenge 09: Graph Paths
+<<<<<<< HEAD
 // Michael McRoskey
 
 #include <iostream>
@@ -95,6 +96,14 @@ int main(int argc, char *argv[]) {
         }
         graph++;
     }
+=======
+
+using namespace std;
+
+// Main Execution
+
+int main(int argc, char *argv[]) {
+>>>>>>> 9834fe988c5258224b073e35a63665a4ff513dc9
     return EXIT_SUCCESS;
 }
 
