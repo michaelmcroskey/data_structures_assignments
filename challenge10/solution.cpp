@@ -4,13 +4,14 @@
 #include <iostream>
 #include <queue>
 #include <map>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-// FUNCTIONS ----------------------------------------
-
-char to_char(int array_index){ return (char)(array_index+321);}
-int to_int(char character){ return (int)(character-321); }
+// FUNCTIONS ------------------------------------------------------
+char to_char(int array_index){ return (char)(array_index+65);}
+int to_int(char character){ return (int)(character-65); }
 
 struct Edge{
     int cost;
@@ -20,84 +21,81 @@ struct Edge{
 
 struct EdgeCost{
     bool operator()(const Edge& lhs, const Edge& rhs) const{
-        return lhs.cost < rhs.cost;
+        return lhs.cost > rhs.cost;
     }
 };
 
-// MAIN EXECUTION -----------------------------------
-
+// MAIN EXECUTION -------------------------------------------------
 int main(int argc, char *argv[]) {
     
-    // -1 = NONE
-    
+    bool first_pass = true;
     int NVERTICES;
     
-    // EACH GRAPH -----------------------------------
+    // EACH GRAPH -------------------------------------------------
     while (cin >> NVERTICES){
         
-        int g[26][26];
+        map<char, int> g[26];
         
-        // LOAD VERTICES ----------------------------
-        for (int i=0; i<NVERTICES; i++)
-            for (int j=0; j<NVERTICES; j++)
-                cin >> g[i][j];
-        
-        // int total_weight;
+        // LOAD VERTICES ------------------------------------------
+        for (int i=0; i<NVERTICES; i++){
+            for (int j=0; j<NVERTICES; j++){
+                int cost;
+                cin >> cost;
+                if (cost>0){
+                    g[i][to_char(j)] = cost;
+                    g[j][to_char(i)] = cost;
+                }
+            }
+        }
+
+        int total_weight = 0;
         
         priority_queue<int, std::vector<Edge>, EdgeCost> frontier;
         map<char, char> marked;
         
-        int a = g[0][0];
-        size_t i = 1;
-        cout << a << " "<< to_char(a) << endl;
-        while (a == -1){
-            cout << "i::" << i << endl;
-            a = g[0][i];
-            i++;
-            cout << "LOOP " << a << " " << to_char(a) << endl;
+        // STARTING NODE -----------------------------------------
+        frontier.push({0, 'A', 'A'});
+        
+        // PRIM ALGORITHM -----------------------------------------
+        while (!frontier.empty()){
+            Edge v = frontier.top();
+            frontier.pop();
+        
+            if (marked.find(v.name) != marked.end())
+                continue;
+           
+            marked[v.name] = v.prev;
+            total_weight += v.cost;
+            
+            for (auto u : g[to_int(v.name)])
+                frontier.push({u.second, u.first, v.name});
         }
+           
+        marked.erase(marked.find('A'));
         
-        cout << "END " << a << " " << to_char(a) << endl;
-        
-        //frontier.push({0, a, a});
-//        
-//        while (!frontier.empty()){
-//            auto v = frontier.top();
-//            frontier.pop();
-//            
-//            if (marked.find(v.name) != marked.end())
-//                continue;
-//           
-//            marked[v.name] = v.prev;
-//            for (auto u : g)
-//                frontier.push({u.cost, u.name, v.name});
-//            
-//        }
-
-//            while not frontier.empty():
-//                v = frontier.pop()
-//
-//                if v.name in marked:
-//                    continue
-//
-//                marked[v.name] = v.prev
-//                for u in g.edges[v.name]:
-//                    frontier.push((u.cost, u.name, v.name)) 
-
-        
-        
-        // OUTPUT (DEBUG) ----------------------------
-        for (int i=0; i<NVERTICES; i++)
-            cout << to_char(i) << "  ";
-        cout << endl;
-        
-        for (int i=0; i<NVERTICES; i++){
-            cout << to_char(i) << " ";
-            for (int j=0; j<NVERTICES; j++){
-                cout << g[i][j] << " ";
+        // SORT RESULTS -------------------------------------------
+        vector<pair<char, char>> results;
+        for (auto key : marked){
+            char A = key.first, B = key.second;
+            if (A<B){
+                results.push_back({A,B});
+            } else {
+                results.push_back({B,A});
             }
+        }
+            
+        sort(results.begin(), results.end());
+        
+        // OUTPUT RESULT ------------------------------------------
+        if (first_pass){
+            first_pass = false;
+        } else {
             cout << endl;
         }
+        
+        cout << total_weight << endl;
+        for (auto i : results)
+            cout << i.first << i.second << endl;
     }
     
     return EXIT_SUCCESS;
