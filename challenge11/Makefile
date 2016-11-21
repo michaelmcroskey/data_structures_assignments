@@ -38,24 +38,24 @@ test-map-time:		$(MEASURE) map
 
 test-reduce-output:	reduce
 	@echo "Testing reduce (small) output..."
-	@diff --suppress-common-lines -y <(sort output.small.map | ./reduce) output.small.reduce
+	@diff --suppress-common-lines -y <(LC_ALL=C sort output.small.map | ./reduce) output.small.reduce
 	@echo "Testing reduce (large) output..."
-	@diff --suppress-common-lines -y <(sort output.large.map | ./reduce) output.large.reduce
+	@diff --suppress-common-lines -y <(LC_ALL=C sort output.large.map | ./reduce) output.large.reduce
 
 test-reduce-memory:	reduce
 	@echo "Testing reduce (small) memory..."
-	@[ `sort output.small.map | valgrind --leak-check=full ./reduce 2>&1 | grep ERROR | awk '{print $$4}'` = 0 ]
+	@[ `LC_ALL=C sort output.small.map | valgrind --leak-check=full ./reduce 2>&1 | grep ERROR | awk '{print $$4}'` = 0 ]
 	@echo "Testing reduce (large) memory..."
-	@[ `sort output.large.map | valgrind --leak-check=full ./reduce 2>&1 | grep ERROR | awk '{print $$4}'` = 0 ]
+	@[ `LC_ALL=C sort output.large.map | valgrind --leak-check=full ./reduce 2>&1 | grep ERROR | awk '{print $$4}'` = 0 ]
 
 test-reduce-time:		$(MEASURE) reduce
 	@echo "Testing reduce (small) time..."
-	@sort output.small.map | $(MEASURE) ./reduce | tail -n 1 | awk '{ if ($$1 > 1.0) { print "Time limit exceeded"; exit 1} }'
+	@LC_ALL=C sort output.small.map | $(MEASURE) ./reduce | tail -n 1 | awk '{ if ($$1 > 1.0) { print "Time limit exceeded"; exit 1} }'
 	@echo "Testing reduce (large) time..."
-	@sort output.large.map | $(MEASURE) ./reduce | tail -n 1 | awk '{ if ($$1 > 1.0) { print "Time limit exceeded"; exit 1} }'
+	@LC_ALL=C sort output.large.map | $(MEASURE) ./reduce | tail -n 1 | awk '{ if ($$1 > 1.0) { print "Time limit exceeded"; exit 1} }'
 
 test-map-reduce:	map reduce
 	@echo "Testing map reduce (small) output..."
-	@diff --suppress-common-lines -y <(./map < input.small | sort | ./reduce) output.small.reduce
+	@diff --suppress-common-lines -y <(./map < input.small | LC_ALL=C sort | ./reduce) output.small.reduce
 	@echo "Testing map reduce (large) output..."
-	@diff --suppress-common-lines -y <(./map < input.large | sort | ./reduce) output.large.reduce
+	@diff --suppress-common-lines -y <(./map < input.large | LC_ALL=C sort | ./reduce) output.large.reduce
