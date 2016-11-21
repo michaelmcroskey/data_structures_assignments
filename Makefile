@@ -9,4 +9,4 @@ $(MEASURE):	$(MEASURE).c
 test:		$(MEASURE)
 	@[ "$(BRANCH)" = "master" ] \
 	    || (echo "$(BRANCH)" | grep -q reading) \
-	    || { [ -f "$(BRANCH)/solution.cpp" ] && (echo "Testing $(BRANCH)" && cd $(BRANCH) && make -s test) }
+	    || { [ -f "$(BRANCH)/Makefile" ] && (echo "Testing $(BRANCH)" && cd $(BRANCH) && make -s test) }
