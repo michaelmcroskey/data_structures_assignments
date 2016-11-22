@@ -12,27 +12,33 @@ using namespace std;
 string clean(string s){
     for (int i=0; i<s.length(); i++)
         s[i] = tolower(s[i]);
-    s.erase(remove_if(s.begin(), s.end(), ::ispunct), s.end()); 
-    s.erase(remove_if(s.begin(), s.end(), ::isdigit), s.end());
-    return word;
+    if (!isalnum(s.front())) s.erase(0,1);
+    if (!isalnum(s.back())) s.pop_back();
+    return s;
+}
+
+void stripUnicode(string &s) {
+    auto invalid = [] (int c) {return !(c>=0 && c<128);};
+    s.erase(remove_if(s.begin(),s.end(), invalid), s.end());  
 }
 
 // MAIN EXECUTION  ----------------------------------------
 int main(int argc, char *argv[]) {
     
-    map<string, int> m;
     int line_number = 1;
     std::string line;
     
     // LINE-BY-LINE --------------------------------------
-    while (std::getline(std::cin, line)){
+    while (getline(cin, line)){
+        
+        stripUnicode(line);
         
         // PARSE INPUT -----------------------------------
         string word;
-        stringstream ss(clean(line));
         vector<string> words;
+        stringstream ss(line);
         while (ss >> word)
-            words.push_back(word);
+            words.push_back(clean(word));
         
         // OUTPUT VECTOR ---------------------------------
         for (auto i : words)
