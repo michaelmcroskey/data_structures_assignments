@@ -5,26 +5,32 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 // FUNCTIONS  ---------------------------------------------
 string clean(string s){
-    for (int i=0; i<s.length(); i++)
+    for (unsigned int i=0; i<s.length(); i++)
         s[i] = tolower(s[i]);
-    while (!isalnum(s.front()))
-        s.erase(0,1);
-    while (!isalnum(s.back()))
+    while (!isalnum(s.back())){
         s.pop_back();
+        if (s.empty()) break;
+    }
+    if (s.empty()) return s;
+    while (!isalnum(s.front())){
+        s.erase(0,1);
+        if (s.empty()) break;
+    }
     return s;
 }
 
 void strip_unicode(string &s) {
     auto invalid = [] (int c) {return !(c>=0 && c<128);};
-    s.erase(remove_if(s.begin(),s.end(), invalid), s.end());  
+    s.erase(std::remove_if(s.begin(),s.end(), invalid), s.end());  
 }
 
-// MAIN EXECUTION  ----------------------------------------
+// MAIN EXECUTION  ---------------------------------------
 int main(int argc, char *argv[]) {
     
     int line_number = 1;
@@ -39,9 +45,12 @@ int main(int argc, char *argv[]) {
         // PARSE INPUT -----------------------------------
         strip_unicode(line);
         stringstream ss(line);
-        while (ss >> word)
-            words.push_back(clean(word));
-        
+        while (ss >> word){
+            word = clean(word);
+            if (!word.empty())
+                words.push_back(word);
+        }
+
         // OUTPUT VECTOR ---------------------------------
         for (auto i : words)
             cout << i << "\t" << line_number << endl;

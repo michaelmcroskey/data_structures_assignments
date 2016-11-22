@@ -22,8 +22,16 @@ int main(int argc, char *argv[]) {
     for (auto i : m){
         cout << i.first << "\t";
         
-        for (auto j : i.second)
-            cout << j << " ";
+        bool first_pass = true;
+        
+        for (auto j : i.second){
+            if (first_pass){
+                first_pass = false;
+            } else {
+                cout << " ";
+            }
+            cout << j;
+        }
         cout << endl;
     }
     
