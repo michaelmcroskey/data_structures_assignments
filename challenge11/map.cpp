@@ -12,12 +12,14 @@ using namespace std;
 string clean(string s){
     for (int i=0; i<s.length(); i++)
         s[i] = tolower(s[i]);
-    if (!isalnum(s.front())) s.erase(0,1);
-    if (!isalnum(s.back())) s.pop_back();
+    while (!isalnum(s.front()))
+        s.erase(0,1);
+    while (!isalnum(s.back()))
+        s.pop_back();
     return s;
 }
 
-void stripUnicode(string &s) {
+void strip_unicode(string &s) {
     auto invalid = [] (int c) {return !(c>=0 && c<128);};
     s.erase(remove_if(s.begin(),s.end(), invalid), s.end());  
 }
@@ -31,11 +33,11 @@ int main(int argc, char *argv[]) {
     // LINE-BY-LINE --------------------------------------
     while (getline(cin, line)){
         
-        stripUnicode(line);
-        
-        // PARSE INPUT -----------------------------------
         string word;
         vector<string> words;
+        
+        // PARSE INPUT -----------------------------------
+        strip_unicode(line);
         stringstream ss(line);
         while (ss >> word)
             words.push_back(clean(word));
