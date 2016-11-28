@@ -1,4 +1,6 @@
 common/measure
+challenge*/map
+challenge*/reduce
 challenge*/solution
 *.o
 *.swp
